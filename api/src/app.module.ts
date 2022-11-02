@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { AuthModule } from './auth/auth.module';
 import { User } from './user/user.entity';
 import { UsersModule } from './user/users.module';
 
@@ -20,7 +21,8 @@ import { UsersModule } from './user/users.module';
       entities: [User],
       synchronize: true,
     }),
-    UsersModule
+    UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

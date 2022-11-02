@@ -10,13 +10,13 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,
     ) {}
-
-    async findAll(): Promise<User[]> {
-        return await this.usersRepository.find();
-    }
     
-    async findOne(id: number): Promise<User> {
+    async findOneById(id: number): Promise<User> {
         return await this.usersRepository.findOneBy({ id });
+    }
+
+    async findOneByEmail(email: string): Promise<User> {
+        return await this.usersRepository.findOneBy({ email });
     }
 
     async create(createUser: CreateUser): Promise<User> {
@@ -24,9 +24,5 @@ export class UsersService {
         user.email = createUser.email;
         user.password = createUser.password;
         return await this.usersRepository.save(user);
-    }
-    
-    async remove(id: string): Promise<void> {
-        await this.usersRepository.delete(id);
     }
 }

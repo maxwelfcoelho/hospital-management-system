@@ -7,10 +7,6 @@ import { LocalStrategy } from "./strategies/local.strategy";
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from "@nestjs/config";
 
-console.log('*'.repeat(100));
-console.log(process.env.DATABASE_NAME)
-console.log('*'.repeat(100));
-
 @Module({
     imports: [
         UsersModule,

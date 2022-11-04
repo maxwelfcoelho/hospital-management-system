@@ -5,8 +5,4 @@ import { UsersService } from "./users.service";
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
-    @Get()
-    async hello() {
-        return await this.usersService.findAll();
-    }
 }

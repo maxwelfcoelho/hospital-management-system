@@ -4,13 +4,6 @@ import {Repository} from "typeorm";
 import {User} from "./user.entity";
 import {UsersService} from "./users.service";
 
-class UsersRepositoryFake {
-    public create(): void {}
-    public async save(): Promise<void> {}
-    public async remove(): Promise<void> {}
-    public async findOneBy(): Promise<void> {}
-}
-
 describe('UsersService', () => {
     let usersService: UsersService;
     let usersRepository: Repository<User>;

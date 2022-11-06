@@ -16,6 +16,7 @@ describe('UsersService', () => {
                     provide: getRepositoryToken(User),
                     useValue: {
                         findOneBy: jest.fn(() => {}),
+                        save: jest.fn(() => {}),
                     }
                 }
             ],
@@ -49,6 +50,56 @@ describe('UsersService', () => {
             
             expect(usersRepositorySpy).toBeCalledWith({id: 100});
             expect(user).toBe(null);
+        });
+    });
+
+    describe('findOneByEmail', () => {
+        it('should return user, if user with given id is found', async() => {
+            const userMock = new User();
+            userMock.id = 1;
+            userMock.email = 'example@hotmail.com';
+            userMock.password = '12345678';
+
+            const usersRepositorySpy = jest.spyOn(usersRepository, 'findOneBy')
+                .mockReturnValue(new Promise(resolve => resolve(userMock)));
+
+            const user = await usersService.findOneByEmail('example@hotmail.com');
+
+            expect(usersRepositorySpy).toBeCalledWith({email: userMock.email});
+            expect(user).toEqual(userMock);
+        });
+
+        it('should return null, if user with given is is not found', async() => {
+            const usersRepositorySpy = jest.spyOn(usersRepository, 'findOneBy')
+                .mockReturnValue(null);
+
+            const user = await usersService.findOneByEmail('notregistered@gmail.com');
+
+            expect(usersRepositorySpy).toBeCalledWith({ email: 'notregistered@gmail.com' });
+            expect(user).toBe(null);
+        });
+    });
+
+    describe('create', () => {
+        it('should create a user', async() => {
+            const expected = new User();
+            expected.id = 1;
+            expected.email = 'example@hotmail.com';
+            expected.password = '12345678';
+
+            const usersRepositorySpy = jest.spyOn(usersRepository, 'save')
+                .mockReturnValue(new Promise(resolve => resolve(expected)));
+
+            const createUserDto = {
+                email: 'example@hotmail.com',
+                password: '12345678'
+            };
+
+            const user = await usersService.create(createUserDto);
+            expect(usersRepositorySpy).toBeCalledWith(createUserDto);
+            expect(user).toHaveProperty('email', createUserDto.email);
+            expect(user).toHaveProperty('password', createUserDto.password);
+            expect(user).toHaveProperty('id', expected.id);
         });
     });
 });

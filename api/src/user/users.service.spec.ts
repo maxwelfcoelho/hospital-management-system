@@ -2,13 +2,7 @@ import {Test} from "@nestjs/testing";
 import {getRepositoryToken} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {User} from "./user.entity";
-import {UsersController} from "./users.controller";
 import {UsersService} from "./users.service";
-
-const userMock = new User();
-userMock.id = 1;
-userMock.email = 'example@gmail.com';
-userMock.password = 'example';
 
 class UsersRepositoryFake {
     public create(): void {}

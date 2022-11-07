@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt';
 
 import { CreateUser } from "src/user/dtos/create-user";
-import { User } from "src/user/user.entity";
-import { UsersService } from "src/user/users.service";
+import { User } from "../user/user.entity";
+import { UsersService } from "../user/users.service";
 
 import { comparePasswords, hashPassword } from '../util/encrypt';
 

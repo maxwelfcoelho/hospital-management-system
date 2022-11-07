@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { Request, Response } from "express";
-import { CreateUser } from "src/user/dtos/create-user";
+import { CreateUser } from "../user/dtos/create-user";
 import { User } from "src/user/user.entity";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
@@ -14,8 +14,8 @@ export class AuthController {
 
     @Post('register')
     @HttpCode(201)
-    async register(@Body() createUser: CreateUser): Promise<User> {
-        return await this.authService.register(createUser);
+    async register(@Body() createUser: CreateUser): Promise<void> {
+        await this.authService.register(createUser);
     }
 
     @UseGuards(LocalAuthGuard)

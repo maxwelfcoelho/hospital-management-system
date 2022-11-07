@@ -23,6 +23,7 @@ export class UsersService {
         const user = new User();
         user.email = createUser.email;
         user.password = createUser.password;
+        user.role = createUser.role;
         return await this.usersRepository.save(user);
     }
 }

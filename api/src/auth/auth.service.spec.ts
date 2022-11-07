@@ -1,6 +1,8 @@
 import {createMock} from "@golevelup/ts-jest";
 import {JwtModule, JwtService} from "@nestjs/jwt";
 import {Test} from "@nestjs/testing";
+import {Role} from "../role/role.entity";
+import {RolesService} from "../role/roles.service";
 import {User} from "../user/user.entity";
 import {UsersModule} from "../user/users.module";
 import {UsersService} from "../user/users.service";
@@ -13,6 +15,7 @@ describe('AuthService', () => {
     let authService: AuthService;
     let usersService: UsersService;
     let jwtService: JwtService;
+    let rolesService: RolesService;
 
     beforeEach(async() => {
         const moduleRef = await Test.createTestingModule({
@@ -20,6 +23,7 @@ describe('AuthService', () => {
                 AuthService,
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: JwtService, useValue: createMock<JwtService>() },
+                { provide: RolesService, useValue: createMock<RolesService>() },
             ],
         })
         .compile();
@@ -27,6 +31,7 @@ describe('AuthService', () => {
         authService = moduleRef.get<AuthService>(AuthService);
         usersService = moduleRef.get<UsersService>(UsersService);
         jwtService = moduleRef.get<JwtService>(JwtService);
+        rolesService = moduleRef.get<RolesService>(RolesService);
     });
 
     describe('register', () => {
@@ -36,10 +41,15 @@ describe('AuthService', () => {
                 password: '1234568',
             };
 
+            const role = new Role();
+            role.id = 3;
+            role.name = 'patient';
+
             const expected = new User();
             expected.id = 1;
             expected.email = createUser.email;
             expected.password = '12345678';
+            expected.role = role;
 
             jest.spyOn(usersService, 'findOneByEmail')
                 .mockReturnValue(null);

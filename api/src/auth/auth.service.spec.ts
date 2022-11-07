@@ -6,6 +6,9 @@ import {UsersModule} from "../user/users.module";
 import {UsersService} from "../user/users.service";
 import {AuthService} from "./auth.service";
 
+// TODO: unit tests are taking ten seconds to run only two tests,
+// try to investigate the problem.
+
 describe('AuthService', () => {
     let authService: AuthService;
     let usersService: UsersService;
@@ -93,6 +96,25 @@ describe('AuthService', () => {
 
             expect(payload).toEqual(null);
         });
+    });
 
+    describe('login', () => {
+            it('should return a jwt token with an email and id payload', async() => {
+            const user = new User();
+            user.id = 1;
+            user.email = 'example@gmail.com';
+            user.password = '$2a$10$qM9OdCqsP5wjvwVPzZsmwOmpJBoLZ9Y4HLHhwYqDtROxncRIsVUfe';
+            user.isActive = true;
+
+            const payload = { email: user.email, sub: user.id };
+
+            const jwtServiceSpy = jest.spyOn(jwtService, 'sign')
+                .mockReturnValue('jwt');
+
+            const token = await authService.login(user);
+
+            expect(jwtServiceSpy).toBeCalledWith(payload);
+            expect(token).toEqual(expect.any(String));
+        });
     });
 });

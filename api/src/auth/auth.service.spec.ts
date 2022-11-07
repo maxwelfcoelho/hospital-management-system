@@ -66,4 +66,33 @@ describe('AuthService', () => {
             await expect(async() => {await authService.register(createUser)}).rejects.toThrow('Email already exists');
         });
     });
+
+    describe('validateUser', () => {
+        it('should return id and email, if the user email is found and passwords matches', async() => {
+            const mockUser = new User();
+            mockUser.id = 1;
+            mockUser.email = 'example@gmail.com';
+            mockUser.password = '$2a$10$qM9OdCqsP5wjvwVPzZsmwOmpJBoLZ9Y4HLHhwYqDtROxncRIsVUfe';
+            mockUser.isActive = true;
+
+            const usersServiceSpy = jest.spyOn(usersService, 'findOneByEmail')
+                .mockReturnValue(new Promise(resolve => resolve(mockUser)));
+
+            const payload = await authService.validateUser(mockUser.email, '12345678');
+            expect(payload).toHaveProperty('id', mockUser.id); 
+            expect(payload).toHaveProperty('email', mockUser.email);
+            expect(payload).not.toHaveProperty('password');
+            expect(payload).not.toHaveProperty('isActive');
+        });
+
+        it('should return null,if user is not found or passwords does not matches', async() => {
+            jest.spyOn(usersService, 'findOneByEmail')
+                .mockReturnValue(null);
+
+            const payload = await authService.validateUser('example@gmail.com', '12345678');
+
+            expect(payload).toEqual(null);
+        });
+
+    });
 });

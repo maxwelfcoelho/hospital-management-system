@@ -99,7 +99,7 @@ describe('AuthService', () => {
     });
 
     describe('login', () => {
-            it('should return a jwt token with an email and id payload', async() => {
+        it('should return a jwt token with an email and id payload', async() => {
             const user = new User();
             user.id = 1;
             user.email = 'example@gmail.com';

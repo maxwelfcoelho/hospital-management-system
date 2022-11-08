@@ -15,6 +15,15 @@ export class UsersService {
         return await this.usersRepository.findOneBy({ id });
     }
 
+    async findOneByIdWithRole(id: number): Promise<User> {
+        return await this.usersRepository.findOne({
+            where: {
+                id: id,
+            },
+            relations: ['role'],
+        });
+    }
+
     async findOneByEmail(email: string): Promise<User> {
         return await this.usersRepository.findOneBy({ email });
     }

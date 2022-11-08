@@ -2,11 +2,12 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt';
 import {RolesService} from "../role/roles.service";
 
-import { CreateUser } from "src/user/dtos/create-user";
+import { CreateUser } from "../user/dtos/create-user";
 import { User } from "../user/user.entity";
 import { UsersService } from "../user/users.service";
 
 import { comparePasswords, hashPassword } from '../util/encrypt';
+import {Role} from "src/role/role.entity";
 
 @Injectable()
 export class AuthService {

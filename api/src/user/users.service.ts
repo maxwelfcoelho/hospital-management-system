@@ -15,6 +15,15 @@ export class UsersService {
         return await this.usersRepository.findOneBy({ id });
     }
 
+    async findOneByIdWithRole(id: number): Promise<User> {
+        return await this.usersRepository.findOne({
+            where: {
+                id: id,
+            },
+            relations: ['role'],
+        });
+    }
+
     async findOneByEmail(email: string): Promise<User> {
         return await this.usersRepository.findOneBy({ email });
     }
@@ -23,6 +32,7 @@ export class UsersService {
         const user = new User();
         user.email = createUser.email;
         user.password = createUser.password;
+        user.role = createUser.role;
         return await this.usersRepository.save(user);
     }
 }

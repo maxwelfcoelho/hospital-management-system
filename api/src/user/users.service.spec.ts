@@ -1,5 +1,6 @@
 import {Test} from "@nestjs/testing";
 import {getRepositoryToken} from "@nestjs/typeorm";
+import {Role} from "../role/role.entity";
 import {Repository} from "typeorm";
 import {User} from "./user.entity";
 import {UsersService} from "./users.service";
@@ -82,24 +83,31 @@ describe('UsersService', () => {
 
     describe('create', () => {
         it('should create a user', async() => {
+            const role = new Role();
+            role.id = 3;
+            role.name = 'patient';
+
             const expected = new User();
             expected.id = 1;
             expected.email = 'example@hotmail.com';
             expected.password = '12345678';
+            expected.role = role;
 
             const usersRepositorySpy = jest.spyOn(usersRepository, 'save')
                 .mockReturnValue(new Promise(resolve => resolve(expected)));
 
             const createUserDto = {
                 email: 'example@hotmail.com',
-                password: '12345678'
+                password: '12345678',
+                role,
             };
 
             const user = await usersService.create(createUserDto);
             expect(usersRepositorySpy).toBeCalledWith(createUserDto);
+            expect(user).toHaveProperty('id', expected.id);
             expect(user).toHaveProperty('email', createUserDto.email);
             expect(user).toHaveProperty('password', createUserDto.password);
-            expect(user).toHaveProperty('id', expected.id);
+            expect(user).toHaveProperty('role', expected.role);
         });
     });
 });

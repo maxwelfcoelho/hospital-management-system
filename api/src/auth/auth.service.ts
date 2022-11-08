@@ -1,17 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt';
+import {RolesService} from "../role/roles.service";
 
-import { CreateUser } from "src/user/dtos/create-user";
+import { CreateUser } from "../user/dtos/create-user";
 import { User } from "../user/user.entity";
 import { UsersService } from "../user/users.service";
 
 import { comparePasswords, hashPassword } from '../util/encrypt';
+import {Role} from "src/role/role.entity";
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
+        private rolesService: RolesService,
     ) {}
 
     async register(createUser: CreateUser): Promise<User> {
@@ -22,9 +25,12 @@ export class AuthService {
 
         const hashedPassword = await hashPassword(createUser.password);
 
+        const role = await this.rolesService.findRoleByName('patient');
+
         return await this.usersService.create({
             email: createUser.email,
-            password: hashedPassword
+            password: hashedPassword,
+            role,
         });
     }
 

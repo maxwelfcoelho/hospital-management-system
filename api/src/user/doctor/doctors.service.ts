@@ -5,12 +5,15 @@ import { Repository } from "typeorm";
 import {User} from "../user.entity";
 import { Doctor } from "./doctor.entity";
 import {DoctorRequest} from "./dtos/doctor-request";
+import {Role} from "../../role/role.entity";
+import {RolesService} from "../../role/roles.service";
 
 @Injectable()
 export class DoctorsService {
     constructor(
         @InjectRepository(Doctor)
         private doctorsRepository: Repository<Doctor>,
+        private rolesService: RolesService,
     ) {}
 
     async findAllDoctors(): Promise<Doctor[]> {
@@ -31,13 +34,16 @@ export class DoctorsService {
     async create(doctorRequest: DoctorRequest) {
         const hashedPassword = await hashPassword(doctorRequest.password);
 
+        const role = await this.rolesService.findRoleByName('doctor');
+
         const doctor = new Doctor();
         const user = new User();
         user.name = doctorRequest.name;
         user.email = doctorRequest.email;
         user.password = hashedPassword;
         user.phone = doctorRequest.phone;
-        doctor.user = user; 
+        user.role = role; 
+        doctor.user = user;
 
         await this.doctorsRepository.save(doctor);
     }

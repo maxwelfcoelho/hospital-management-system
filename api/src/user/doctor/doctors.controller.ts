@@ -12,8 +12,8 @@ export class DoctorsController {
     ) {}
 
     @Get('doctors')
-    @RoleAllowed('admin')
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    //@RoleAllowed('admin')
+    //@UseGuards(JwtAuthGuard, RolesGuard)
     async findAllDoctors() {
         return await this.doctorsService.findAllDoctors();
     }

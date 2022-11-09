@@ -5,6 +5,8 @@ import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import {Role} from './role/role.entity';
 import {RolesModule} from './role/roles.module';
+import {Doctor} from './user/doctor/doctor.entity';
+import { DoctorsModule } from './user/doctor/doctors.module';
 import { User } from './user/user.entity';
 import { UsersModule } from './user/users.module';
 
@@ -20,12 +22,14 @@ import { UsersModule } from './user/users.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Role],
+      entities: [User, Role, Doctor],
       synchronize: true,
+      logging: true,
     }),
     UsersModule,
     AuthModule,
     RolesModule,
+    DoctorsModule,
   ],
   controllers: [],
   providers: [],
